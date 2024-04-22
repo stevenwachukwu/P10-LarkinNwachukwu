@@ -49,7 +49,7 @@ public:
     BadColor (const string bc) : BadPlayer(bc) {
     };
     string basePrint() override {
-        return incorrectColor + "Is already bring used";
+        return incorrectColor + "Is already being used";
     }
 };
 
