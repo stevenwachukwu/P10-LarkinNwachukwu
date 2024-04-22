@@ -16,7 +16,7 @@ private:
     Board Printer;
     void Gameroll();
     void Gamestop();
-
+    void checkData();
 
 public:
     Game(); //the constructor for game
@@ -25,5 +25,6 @@ public:
     void oneTurn(Player* pp);
     void start();
     ifstream inputFile2;
+    void getPlayers();
 };
 #endif
