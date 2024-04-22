@@ -73,7 +73,7 @@ void Game::getNewPlayer() {
             Printer.startTurn(&player1);
         }
     } catch (BadPlayer wrongPlayer ) {
-        cout << wrongPlayer.basePrint();
+        cout << wrongPlayer.basePrint() << "\n" << endl;
     }
 }
 
@@ -84,6 +84,7 @@ void Game::oneTurn(Player* pp) {
     cin >> gameOptions; //comment this out whenever you want option 1 or 2 (default setting)
     //inputFile2 >> gameOptions; //comment this out whenever you want option 3
     try {
+        //throw (BadPlayer(string (4, gameOptions)));
         if (gameOptions == 1) {
             Gameroll();
         } else if (gameOptions == 2) {
@@ -92,7 +93,8 @@ void Game::oneTurn(Player* pp) {
             cout << "Sorry, couldn't register your input!" << endl;
         }
     } catch (BadChoice wrongChoice) {
-        cout << wrongChoice.basePrint();
+        cout <<"You have selected: " << wrongChoice.basePrint();
+        cout << "Please try again!" << endl;
     }
 }
 
@@ -106,19 +108,19 @@ void Game::Gameroll() {
     int firstVal;
     int secondVal;
     cout << "\nPlease select any of the dice values and letters (specifically their numbers): " << endl;
-    cin >> firstVal;
+    try {
+        cin >> firstVal;
         while (true) {
             if (firstVal == diceArray[0] || firstVal == diceArray[1] || firstVal == diceArray[2] ||
-            firstVal == diceArray[3]) {
-            cout << "The first value was accepted!" << endl;
-            cout << "Please enter in the second value: " << endl;
-            break;
-        }
-            else {
+                firstVal == diceArray[3]) {
+                cout << "The first value was accepted!" << endl;
+                cout << "Please enter in the second value: " << endl;
+                break;
+            } else {
                 cout << "The first value was not accepted, please try again!" << endl;
                 cin >> firstVal;
+            }
         }
-   }
         cin >> secondVal;
         while (true) {
             if (secondVal == diceArray[0] || secondVal == diceArray[1] || secondVal == diceArray[2] ||
@@ -130,18 +132,23 @@ void Game::Gameroll() {
                 cin >> secondVal;
             }
         }
-    int arraySum = 0;
-    for (int i = 0; i < 4; i++) {
-         arraySum +=diceArray[i];
-    }
-    int totalVal = (arraySum) - (firstVal + secondVal); //this determines which slot "T" would be in
-    Printer.print(cout);
-    bool Boardval = Printer.move(totalVal);
-    if (Boardval == true) {
+        int arraySum = 0;
+        for (int i = 0; i < 4; i++) {
+            arraySum += diceArray[i];
+        }
+        int totalVal = (arraySum) - (firstVal + secondVal); //this determines which slot "T" would be in
         Printer.print(cout);
+        bool Boardval = Printer.move(totalVal);
+        if (Boardval == true) {
+            Printer.print(cout);
+        } else {
+            Printer.bust();
+        }
+    } catch (BadChoice BadSlot) {
+        cout << BadSlot.basePrint();
     }
-    else {
-    Printer.bust();
+    catch (BadChoice DuplicateSlot) {
+        cout << DuplicateSlot.basePrint();
     }
 } //function utilized to run the roll option
 
@@ -163,4 +170,26 @@ void Game::start() {
         cout << "The game has been terminated!" << endl;
         Printer.stop();
     }
+}
+
+void Game::checkData() {
+    try {
+        string playerName;
+        char color;
+        cout << "Enter in the player's name:\n" << endl;
+        cin >> playerName;
+        cout << "Enter in the player's color:\n" << endl;
+        cin >> color;
+    } catch (BadPlayer wrongPlayer){
+        cerr << "You entered in " << wrongPlayer.basePrint();
+        cerr << "\nPlease try again!" << endl;
+        abort();
+    } catch (BadPlayer BadColor) {
+        cout << BadColor.basePrint();
+    }
+    cout << player1;
+}
+
+void Game::getPlayers() {
+      checkData();
 }
