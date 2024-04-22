@@ -24,6 +24,7 @@ public:
 };
 
 class BadPlayer {
+protected:
     string incorrectPlayer;
 public:
     BadPlayer (string bp):incorrectPlayer(bp) {};
@@ -35,49 +36,47 @@ public:
 class BadName:public BadPlayer {
     string incorrectName;
 public:
-    BadName (string bn):incorrectName(bn), BadPlayer(bn) {
+    BadName (const string& bn): BadPlayer(bn) {
     };
-   string basePrint () override {
-        return string ("Your invalid input was " + incorrectName);
+    string basePrint () override {
+        return string ("Name is already being used " + incorrectName);
     }
 };
 
 class BadColor:public BadPlayer {
-string incorrectColor;
+    string incorrectColor;
 public:
-    BadColor (string bc):incorrectColor(bc), BadPlayer(bc) {
+    BadColor (const string bc) : BadPlayer(bc) {
     };
     string basePrint() override {
-       return string ("Your invalid input was " + incorrectColor);
+        return incorrectColor + "Is already bring used";
     }
 };
 
 class BadChoice {
-string incorrectChoice;
+    string incorrectChoice;
 public:
     BadChoice(string bdChoice):incorrectChoice(bdChoice) {};
     virtual string basePrint () {
-        return string("Your invalid input " + incorrectChoice);
+        return string("Your invalid choice was " + incorrectChoice);
     }
 };
 
 class DuplicateSlot:public BadChoice {
-string incorrectDuplicateSlot;
+    string incorrectDuplicateSlot;
 public:
-    DuplicateSlot (string ds):incorrectDuplicateSlot(ds), BadChoice(ds) {
-    };
+    DuplicateSlot(string ds) : BadChoice(ds) {}
     string basePrint() override {
-        return string ("Your invalid input was " + incorrectDuplicateSlot);
+        return string("Duplicate slot selected: " + incorrectDuplicateSlot);
     }
 };
 
 class BadSlot:public BadChoice {
-string incorrectBadSlot;
+    string incorrectBadSlot;
 public:
-    BadSlot (string bs):incorrectBadSlot(bs), BadSlot(bs) {
-    };
+    BadSlot(string bs) : BadChoice(bs) {}
     string basePrint() override {
-        return string ("Your invalid input was " + incorrectBadSlot);
+        return string("Invalid slot selected: " + incorrectBadSlot);
     }
 };
 
