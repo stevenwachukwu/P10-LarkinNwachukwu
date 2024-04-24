@@ -33,6 +33,9 @@ void Game::getNewPlayer() {
     char color;
     cout << "Enter in the player's name:\n" << endl;
     cin >> playerName;
+    // Throw Bad Player Name
+    // if name is already in use
+
     cout << "Which available color do you want? (Please enter the first letter)" << endl;
     cout << "\nOptions: White, Orange, Yellow, Green, Blue" << endl;
     cin >> color;
@@ -41,7 +44,7 @@ void Game::getNewPlayer() {
         for (int k = 0; k < 1; k++) {
             string availChar = "WOYGB";
             while (true) {
-                if (!isalpha(color)) {
+                if (!isalpha(color)) { // Throw Badcolor
                     throw (BadColor(string (1, color)));
                 }
                 if (availChar.find(color) != string::npos) {
@@ -84,13 +87,18 @@ void Game::oneTurn(Player* pp) {
     cin >> gameOptions; //comment this out whenever you want option 1 or 2 (default setting)
     //inputFile2 >> gameOptions; //comment this out whenever you want option 3
     try {
-        //throw (BadPlayer(string (4, gameOptions)));
+
         if (gameOptions == 1) {
             Gameroll();
         } else if (gameOptions == 2) {
             Gamestop();
-        } else {
+        }
+        else if (gameOptions == 3) {
+            // GameResign?();
+        }
+        else {
             cout << "Sorry, couldn't register your input!" << endl;
+            //throw (BadPlayer(string (4, gameOptions)));
         }
     } catch (BadChoice wrongChoice) {
         cout <<"You have selected: " << wrongChoice.basePrint();
@@ -128,6 +136,7 @@ void Game::Gameroll() {
                 cout << "The second value was accepted!\n";
                 break;
             } else {
+                // Throw here with Cin being taking in a bad value
                 cout << "The second value was not accepted, please try again!\n" << endl;
                 cin >> secondVal;
             }
@@ -184,12 +193,13 @@ void Game::checkData() {
         cerr << "You entered in " << wrongPlayer.basePrint();
         cerr << "\nPlease try again!" << endl;
         abort();
-    } catch (BadPlayer BadColor) {
-        cout << BadColor.basePrint();
+        // Changed to both
+    } catch (BadChoice wrongChoices) {
+        cout << wrongChoices.basePrint();
     }
     cout << player1;
 }
 
 void Game::getPlayers() {
-      checkData();
+    checkData();
 }
