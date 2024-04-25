@@ -32,14 +32,13 @@ void Game::getNewPlayer() {
     string playerName;
     char color;
     cout << "Enter in the player's name:\n" << endl;
+    try {
     cin >> playerName;
-    // Throw Bad Player Name
-    // if name is already in use
+    //throw BadName("Unknown"); //comment this line of code if it's not in use
 
     cout << "Which available color do you want? (Please enter the first letter)" << endl;
     cout << "\nOptions: White, Orange, Yellow, Green, Blue" << endl;
     cin >> color;
-    try {
         int index = 0;
         for (int k = 0; k < 1; k++) {
             string availChar = "WOYGB";
@@ -75,8 +74,8 @@ void Game::getNewPlayer() {
             player1 = Player(playerName, (ECcolor)index); //calling the Player constructor
             Printer.startTurn(&player1);
         }
-    } catch (BadPlayer wrongPlayer ) {
-        cout << wrongPlayer.basePrint() << "\n" << endl;
+    } catch (BadPlayer& incorrectPlayer) {
+        cout << incorrectPlayer.basePrint() << "\n" << endl;
     }
 }
 
@@ -87,22 +86,17 @@ void Game::oneTurn(Player* pp) {
     cin >> gameOptions; //comment this out whenever you want option 1 or 2 (default setting)
     //inputFile2 >> gameOptions; //comment this out whenever you want option 3
     try {
-
         if (gameOptions == 1) {
             Gameroll();
         } else if (gameOptions == 2) {
             Gamestop();
         }
-        else if (gameOptions == 3) {
-            // GameResign?();
-        }
         else {
-            cout << "Sorry, couldn't register your input!" << endl;
-            //throw (BadPlayer(string (4, gameOptions)));
+            throw BadChoice("the wrong value!");
         }
-    } catch (BadChoice wrongChoice) {
-        cout <<"You have selected: " << wrongChoice.basePrint();
-        cout << "Please try again!" << endl;
+    } catch (BadChoice& bdChoice) {
+        cout <<"You have selected: " << bdChoice.basePrint();
+        cout << "\nPlease try again!" << endl;
     }
 }
 
@@ -137,6 +131,7 @@ void Game::Gameroll() {
                 break;
             } else {
                 // Throw here with Cin being taking in a bad value
+                throw BadSlot(1);
                 cout << "The second value was not accepted, please try again!\n" << endl;
                 cin >> secondVal;
             }
@@ -151,14 +146,15 @@ void Game::Gameroll() {
         if (Boardval == true) {
             Printer.print(cout);
         } else {
+            throw BadSlot(14);
             Printer.bust();
         }
-    } catch (BadChoice BadSlot) {
-        cout << BadSlot.basePrint();
+    } catch (BadSlot& incorrectSlot) {
+        cout << incorrectSlot.basePrint();
     }
-    catch (BadChoice DuplicateSlot) {
-        cout << DuplicateSlot.basePrint();
-    }
+    /*catch (BadSlot& incorrectDuplicateSlot) {
+        cout << incorrectDuplicateSlot.basePrint();
+    }*/ //we commented that out since you can't have two catch statements
 } //function utilized to run the roll option
 
 void Game::Gamestop() {
@@ -176,7 +172,7 @@ void Game::start() {
         start();
     }
     else {
-        cout << "The game has been terminated!" << endl;
+        cout << "\nThe game has been terminated!" << endl;
         Printer.stop();
     }
 }
@@ -189,13 +185,13 @@ void Game::checkData() {
         cin >> playerName;
         cout << "Enter in the player's color:\n" << endl;
         cin >> color;
-    } catch (BadPlayer wrongPlayer){
-        cerr << "You entered in " << wrongPlayer.basePrint();
+    } catch (BadPlayer& incorrectPlayer){
+        cerr << "You entered in " << incorrectPlayer.basePrint();
         cerr << "\nPlease try again!" << endl;
         abort();
         // Changed to both
-    } catch (BadChoice wrongChoices) {
-        cout << wrongChoices.basePrint();
+    } catch (BadChoice& incorrectChoice) {
+        cout << incorrectChoice.basePrint();
     }
     cout << player1;
 }
