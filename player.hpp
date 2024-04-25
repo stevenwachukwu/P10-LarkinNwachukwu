@@ -49,7 +49,7 @@ public:
     BadColor (const string bc) : BadPlayer(bc) {
     };
     string basePrint() override {
-        return incorrectColor + "Is already being used";
+        return incorrectColor + "Wrong color input!";
     }
 };
 
@@ -71,12 +71,12 @@ public:
     }
 };
 
-class BadSlot:public BadChoice {
-    string incorrectBadSlot;
+class BadSlot : public BadChoice {
+    int incorrectBadSlot;
 public:
-    BadSlot(string bs) : BadChoice(bs) {}
+    BadSlot(int errorCode) : BadChoice("the improper value that was detected"), incorrectBadSlot(errorCode) {}
     string basePrint() override {
-        return string("Invalid slot selected: " + incorrectBadSlot);
+        return "Error code: " + to_string(incorrectBadSlot) + ", " + BadChoice::basePrint();
     }
 };
 
